@@ -1,3 +1,4 @@
+#SEM7AC MODIFIED IGNORE FILE
 # Ignore Visual Studio temporary files, build results, and
 # user-specific files
 
@@ -96,3 +97,4 @@ obj/
 # Visual Studio 2019/2022 cache folder
 .vs/
 
+/Requirements.txt
