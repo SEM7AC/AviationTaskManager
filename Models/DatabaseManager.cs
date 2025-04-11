@@ -29,12 +29,6 @@ namespace AviationTaskManager.Models
             }
         }
 
-        // Connect method (calls EnsureConnection)
-        public void Connect()
-        {
-            EnsureConnection();
-            System.Console.WriteLine("Connection is ready!");
-        }
 
         // Disconnect method
         public void Disconnect()
@@ -51,18 +45,32 @@ namespace AviationTaskManager.Models
         {
             EnsureConnection(); // Ensure the connection is open
 
-            string sql = "CREATE TABLE IF NOT EXISTS TaskGroups (" +
-                         "TaskGroupId INTEGER PRIMARY KEY, " +
-                         "AircraftTailNumber TEXT NOT NULL, " +
-                         "GroupName TEXT NOT NULL);";
+            string sql = "CREATE TABLE IF NOT EXISTS TaskGroups (TaskGroupId INTEGER PRIMARY KEY, AircraftTailNumber TEXT NOT NULL, GroupName TEXT NOT NULL);";
 
             using (var command = new SqliteCommand(sql, _connection))
             {
                 command.ExecuteNonQuery(); // Executes the SQL command
-                System.Console.WriteLine("TaskGroups table created successfully!");
+                Console.WriteLine("TaskGroups table created successfully!");
             }
 
             Disconnect(); // Close the connection when done
         }
+
+        public void CreateUserTable()
+            {
+            EnsureConnection();
+            string sql = "CREATE TABLE IF NOT EXISTS Users (UserId INTEGER PRIMARY KEY, AUTOINCREMENT, UserName TEXT NOT NULL UNIQUE, PasswordHash TEXT NOT NULL, Role TEXT NOT NULL, CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP, UpdatedAt DATETIME;";
+            
+            using (var command = new SqliteCommand(sql, _connection))
+                {
+                command.ExecuteNonQuery();
+                Console.WriteLine("User table created successfully!");
+                }
+            
+                Disconnect();
+
+            }
+
+            
     }
 }
