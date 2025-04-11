@@ -56,7 +56,7 @@ The **Aviation Task Manager** is a desktop application designed to streamline su
 #### Setup Instructions:
 1. Clone the repository to your local machine:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/AviationTaskManager.git
+   git clone https://github.com/SEM7AC/AviationTaskManager.git
 2. Open the solution file in Visual Studio:
    Open the `AviationTaskManager.sln` file in Visual Studio.
 3. Restore NuGet packages:
@@ -72,7 +72,7 @@ I welcome contributions to improve the Aviation Task Manager! If you’d like to
 
 1. Fork the repository:
    ```bash
-   git fork https://github.com/YOUR_USERNAME/AviationTaskManager.git
+   git fork https://github.com/SEM7AC/AviationTaskManager.git
 
 2. Create a new feature branch:
    ```bash
