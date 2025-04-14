@@ -1,51 +1,56 @@
 ﻿using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AviationTaskManager.Models
 {
     public class DatabaseManager
-    {
-        private static readonly string DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AviationTaskManager.db");
+        {
+        private static readonly string DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../AviationTaskManager.db");
+
         private readonly string ConnectionString = $"Data Source={DbPath};";
+
 
 
         private SqliteConnection? _connection;
 
-        
+        public void CreateNewDatabase()
+            {
+            string newDbPath = "NewAviationTaskManager.db";
+            SQLiteConnection.CreateFile(newDbPath);
+            Debug.WriteLine("New database file created!");
+            }
+
+
 
         // Ensures the connection is open
         private void EnsureConnection()
-        {
-            if (_connection == null)
             {
+            if (_connection == null)
+                {
                 _connection = new SqliteConnection(ConnectionString);
-            }
+                }
 
             if (_connection.State != System.Data.ConnectionState.Open)
-            {
+                {
                 _connection.Open();
+                }
             }
-        }
 
         // Disconnect method
         public void Disconnect()
-        {
-            if (_connection != null)
             {
+            if (_connection != null)
+                {
                 _connection.Close();
                 _connection = null; // Release the reference
+                }
             }
-        }
 
         // Creates the TaskGroups table
         public void CreateTaskGroupsTable()
-        {
+            {
             EnsureConnection(); // Ensure the connection is open
 
             string sql = @"
@@ -57,13 +62,13 @@ namespace AviationTaskManager.Models
                 );";
 
             using (var command = new SqliteCommand(sql, _connection))
-            {
+                {
                 command.ExecuteNonQuery(); // Executes the SQL command
                 Debug.WriteLine("TaskGroups table created successfully.");
-            }
+                }
 
             Disconnect(); // Close the connection when done
-        }
+            }
 
         // Creates the Users table
         public void CreateUserTable()
@@ -79,14 +84,14 @@ namespace AviationTaskManager.Models
                 CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP, 
                 UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
                 );";
-            
+
             using (var command = new SqliteCommand(sql, _connection))
                 {
                 command.ExecuteNonQuery();
                 Debug.WriteLine("User table created successfully!");
                 }
-            
-                Disconnect();
+
+            Disconnect();
 
             }
 
@@ -110,40 +115,42 @@ namespace AviationTaskManager.Models
                 command.ExecuteNonQuery();
                 Debug.WriteLine("UpdateUsersTimestamp trigger created successfully.");
                 }
+            Disconnect();
             }
 
         // Initializes the Database
         public void InitializeDatabase()
             {
-            EnsureConnection();
-
-            // Check if the Users table exists
-            string checkUsersTable = "SELECT name FROM sqlite_master WHERE type='table' AND name='Users';";
-            using (var command = new SqliteCommand(checkUsersTable, _connection))
-            using (var reader = command.ExecuteReader())
+            // Check if the database file already exists
+            if (File.Exists(DbPath))
                 {
-                if (!reader.HasRows) // If the table does NOT exist
-                    {
-                    Debug.WriteLine("Users table not found. Initializing database...");
-                    CreateUserTable();
-                    CreateTaskGroupsTable();
-                    CreateUpdateTrigger();
-                    Debug.WriteLine("Database initialization complete.");
-                    }
-                else
-                    {
-                    Debug.WriteLine("Database already initialized. Skipping setup.");
-                    }
+                Debug.WriteLine("Database file already exists. Skipping creation.");
+                return;
                 }
 
-            Disconnect();
+            try
+                {
+                // Create a new database file
+                SQLiteConnection.CreateFile(DbPath);
+                Debug.WriteLine("Database file created successfully.");
+
+                // Open a connection and initialize tables
+                using (var connection = new SQLiteConnection($"Data Source={DbPath};"))
+                    {
+                    connection.Open();
+
+                    // Create tables
+                    CreateUserTable();
+                    CreateTaskGroupsTable();
+
+                    Debug.WriteLine("Tables created successfully.");
+                    }
+                }
+            catch (Exception ex)
+                {
+                Debug.WriteLine($"Error initializing database: {ex.Message}");
+                }
             }
-
-
-
-
-
-
-
         }
+
     }
