@@ -44,7 +44,7 @@ namespace AviationTaskManager.Views
                 // Step 3: Seed preloaded data
                 status_txt.Content = "Seeding data...";
                 await Task.Delay(750);
-                //DatabaseManager.SeedDatabase(); // Replace with your actual seeding logic
+                DatabaseManager.SeedUsers(); // Ensure admin has access
 
                 // Step 4: Final step before starting the app
                 status_txt.Content = "Initialization complete!";

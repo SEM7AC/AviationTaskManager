@@ -9,7 +9,10 @@ namespace AviationTaskManager.Models
         {
         private static readonly string DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../AviationTaskManager.db"); //Root project directory
         public static readonly string ConnectionString = $"Data Source={DbPath};";
-
+        
+        
+        // Methods //
+        
         // Check if the database exists
         public static bool DatabaseExists()
             {
@@ -80,6 +83,42 @@ namespace AviationTaskManager.Models
             Debug.WriteLine("UpdateUsersTimestamp trigger created successfully.");
             }
 
+        public static void SeedUsers()
+            {
+            using (var connection = new SqliteConnection(ConnectionString))
+                {
+                connection.Open();
+
+                // Check if the admin user exists
+                string checkQuery = "SELECT COUNT(*) FROM Users WHERE UserName = @UserName";
+                using (var checkCommand = new SqliteCommand(checkQuery, connection))
+                    {
+                    checkCommand.Parameters.AddWithValue("@UserName", "admin");
+                    int count = Convert.ToInt32(checkCommand.ExecuteScalar());
+
+                    // If the user doesn't exist, insert it
+                    if (count == 0)
+                        {
+                        string insertQuery = "INSERT INTO Users (UserName, PasswordHash, Role) VALUES (@UserName, @PasswordHash, @Role)";
+                        using (var insertCommand = new SqliteCommand(insertQuery, connection))
+                            {
+                            insertCommand.Parameters.AddWithValue("@UserName", "admin");
+                            insertCommand.Parameters.AddWithValue("@PasswordHash", "admin123"); // Hash this in production!
+                            insertCommand.Parameters.AddWithValue("@Role", "Admin");
+
+                            insertCommand.ExecuteNonQuery();
+                            Debug.WriteLine("Admin user created successfully.");
+                            }
+                        }
+                    else
+                        {
+                        Debug.WriteLine("Admin user already exists. Skipping creation.");
+                        }
+                    }
+                }
+            }
+
+
         // Initialize Database
         public void InitializeDatabase()
             {
@@ -93,7 +132,8 @@ namespace AviationTaskManager.Models
             CreateUserTable(); // Initialize tables
             CreateTaskGroupsTable();
             CreateUpdateTrigger();
+            SeedUsers();
             }
         }
-    }
+    } ///END OF FILE
 

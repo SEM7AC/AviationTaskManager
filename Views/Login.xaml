@@ -50,7 +50,7 @@
         <Button Content="Login"
                 Grid.Row="5" Grid.Column="0"
                 Background="#C0C0C0" Foreground="#2C2C2C"
-                Width="100" Height="30" HorizontalAlignment="Center" Margin="0,100,0,20" />
+                Width="100" Height="30" HorizontalAlignment="Center" Margin="0,100,0,20" Click="LoginButton_Click" />
 
         <!-- Error Message -->
         <TextBlock Name="ErrorMessage"
