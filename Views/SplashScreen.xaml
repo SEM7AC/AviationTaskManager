@@ -1,0 +1,27 @@
+﻿<Window x:Class="AviationTaskManager.Views.SplashScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AviationTaskManager.Views"
+        mc:Ignorable="d"
+        Title="SplashScreen" Height="337" Width="600" Topmost="True" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
+    <Grid>
+        <!-- Background image -->
+        <Grid.Background>
+            <ImageBrush ImageSource="/img/atmSplash.jpg" />
+        </Grid.Background>
+
+        <!-- Title label -->
+        <Label x:Name="title" Content="Aviation Task Manager" 
+               HorizontalAlignment="Center" VerticalAlignment="Top" 
+               Margin="0,26,0,0" Foreground="White" FontSize="40" 
+               HorizontalContentAlignment="Center" FontFamily="Arial" />
+
+        <!-- Status label -->
+        <Label x:Name="status_txt" Content="Loading: " 
+               HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+               Margin="10,0,0,10" Foreground="White" FontSize="16" 
+               HorizontalContentAlignment="Left" />
+    </Grid>
+</Window>
