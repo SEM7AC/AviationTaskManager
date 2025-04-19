@@ -1,6 +1,12 @@
 #SEM7AC MODIFIED IGNORE FILE
-# Ignore Visual Studio temporary files, build results, and
-# user-specific files
+# Ignore Visual Studio temporary files, build results etc.
+
+# Environment files
+.env
+config.json
+
+
+
 
 # Build results
 **/bin/

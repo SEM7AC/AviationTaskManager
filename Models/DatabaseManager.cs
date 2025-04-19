@@ -2,6 +2,7 @@
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
+using System.Xml.Linq;
 
 namespace AviationTaskManager.Models
     {
@@ -9,23 +10,22 @@ namespace AviationTaskManager.Models
         {
         private static readonly string DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../AviationTaskManager.db"); //Root project directory
         public static readonly string ConnectionString = $"Data Source={DbPath};";
-        
-        
+
+
         // Methods //
-        
+
         // Check if the database exists
         public static bool DatabaseExists()
             {
             return File.Exists(DbPath);
             }
+
         // Create database file
         public static void CreateFile()
             {
             SQLiteConnection.CreateFile(DbPath);
             Debug.WriteLine("Database file created successfully.");
             }
-
-
 
         // Execute SQL commands
         public static void ExecuteNonQuery(string sql)
@@ -40,9 +40,23 @@ namespace AviationTaskManager.Models
                 }
             }
 
+        public static void CreateSubTaskTable()
+            {
+            //Create Subtasks Table
+            string sql = @"
+            CREATE TABLE IF NOT EXISTS SubTasks (
+            SubtaskId INTEGER PRIMARY KEY AUTOINCREMENT,
+            TaskGroupId INTEGER NOT NULL,
+            StepName TEXT NOT NULL,
+            Status TEXT DEFAULT 'Incomplete',
+            Comment TEXT,
+            FOREIGN KEY (TaskGroupId) REFERENCES TaskGroups (TaskGroupId) ON DELETE CASCADE
+            );";
+            ExecuteNonQuery(sql);
+            Debug.WriteLine("SubTasks table created successfully");
+            }
 
-
-        // Create specific tables
+        // Create TaskGroup table
         public static void CreateTaskGroupsTable()
             {
             string sql = @"
@@ -54,6 +68,7 @@ namespace AviationTaskManager.Models
             Debug.WriteLine("TaskGroups table created successfully.");
             }
 
+        // Create User table
         public static void CreateUserTable()
             {
             string sql = @"
@@ -68,6 +83,7 @@ namespace AviationTaskManager.Models
             Debug.WriteLine("Users table created successfully.");
             }
 
+        // Create Update trigger
         public static void CreateUpdateTrigger()
             {
             string sql = @"
@@ -83,6 +99,7 @@ namespace AviationTaskManager.Models
             Debug.WriteLine("UpdateUsersTimestamp trigger created successfully.");
             }
 
+        // Seed Initial Admin User
         public static void SeedUsers()
             {
             using (var connection = new SqliteConnection(ConnectionString))
@@ -103,7 +120,7 @@ namespace AviationTaskManager.Models
                         using (var insertCommand = new SqliteCommand(insertQuery, connection))
                             {
                             insertCommand.Parameters.AddWithValue("@UserName", "admin");
-                            insertCommand.Parameters.AddWithValue("@PasswordHash", "admin123"); // Hash this in production!
+                            insertCommand.Parameters.AddWithValue("@PasswordHash", "JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk="); // Hashed with IRON HASHER 
                             insertCommand.Parameters.AddWithValue("@Role", "Admin");
 
                             insertCommand.ExecuteNonQuery();
@@ -118,22 +135,101 @@ namespace AviationTaskManager.Models
                 }
             }
 
-
-        // Initialize Database
-        public void InitializeDatabase()
+        // Hasher for passwords
+        private static string HashPassword(string password)
             {
-            if (DatabaseExists())
+            using (var sha256 = System.Security.Cryptography.SHA256.Create())
                 {
-                Debug.WriteLine("Database file already exists. Skipping creation.");
-                return;
+                var bytes = System.Text.Encoding.UTF8.GetBytes(password);
+                var hash = sha256.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
+                }
+            }
+
+        // Create a new user
+        public static void CreateUser(string username, string plainPassword, string role)
+            {
+            string hashedPassword = HashPassword(plainPassword);
+
+            string query = "INSERT INTO Users (UserName, PasswordHash, Role) VALUES (@UserName, @PasswordHash, @Role)";
+            using (var connection = new SqliteConnection(ConnectionString))
+                {
+                connection.Open();
+                using (var command = new SqliteCommand(query, connection))
+                    {
+                    command.Parameters.AddWithValue("@UserName", username);
+                    command.Parameters.AddWithValue("@PasswordHash", hashedPassword);
+                    command.Parameters.AddWithValue("@Role", role);
+
+                    command.ExecuteNonQuery();
+                    }
                 }
 
-            CreateFile(); // Create new database file
-            CreateUserTable(); // Initialize tables
-            CreateTaskGroupsTable();
-            CreateUpdateTrigger();
-            SeedUsers();
+            System.Diagnostics.Debug.WriteLine($"User {username} created successfully.");
             }
-        }
+
+        // Authenticate Users
+        public static bool AuthenticateUser(string username, string password, out string role)
+            {
+            role = string.Empty;
+
+            using (var connection = new SqliteConnection(ConnectionString))
+                {
+                string query = "SELECT PasswordHash, Role FROM Users WHERE UserName = @Username";
+                using (var command = new SqliteCommand(query, connection))
+                    {
+                    command.Parameters.AddWithValue("@Username", username);
+
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                        {
+                        if (reader.Read())
+                            {
+                            string storedHash = reader.GetString(0); // Get stored hash
+                            role = reader.GetString(1); // Get user role
+
+                            string inputHash = HashPassword(password); // Hash input password
+                            if (storedHash == inputHash)
+                                {
+                                return true; // Authentication successful
+                                }
+                            }
+                        }
+                    }
+                }
+
+            return false; // Authentication failed
+            }
+
+        public static List<TaskGroup> GetAllTaskGroups()
+            {
+            var taskGroups = new List<TaskGroup>();
+
+            using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                connection.Open();
+                string query = "SELECT TaskGroupId, AircraftTailNumber, GroupName FROM TaskGroups";
+
+                using (var command = new SQLiteCommand(query, connection))
+                using (var reader = command.ExecuteReader())
+                    {
+                    while (reader.Read())
+                        {
+                        taskGroups.Add(new TaskGroup
+                            {
+                            TaskGroupId = reader.GetInt32(0),
+                            AircraftTailNumber = reader.GetString(1),
+                            GroupName = reader.GetString(2)
+                            });
+                        }
+                    }
+                }
+
+            return taskGroups;
+            }
+
+
+        } ///END OF CLASS
+
     } ///END OF FILE
 

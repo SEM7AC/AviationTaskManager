@@ -17,11 +17,12 @@ namespace AviationTaskManager
         protected override void OnStartup(StartupEventArgs e)
             {
             base.OnStartup(e);
-                        
-            DatabaseManager dbManager = new DatabaseManager();
-            dbManager.InitializeDatabase();
 
-            Debug.WriteLine("Database initialized. Launching application...");
+            var splashScreen = new Views.SplashScreen();
+            splashScreen.Show();
+
+            // Log the application startup process for debugging purposes
+            System.Diagnostics.Debug.WriteLine("SplashScreen launched. Application starting... (App.xaml.cs)");
             }
         }
     }

@@ -1,12 +1,78 @@
 ﻿<Window x:Class="AviationTaskManager.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AviationTaskManager"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Aviation Task Manager" Height="700" Width="900" Background="#2C2C2C">
+    <Grid Margin="10">
+        <!-- Define Row Heights -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- Top Section -->
+            <RowDefinition Height="*" />
+            <!-- Middle Section -->
+            <RowDefinition Height="Auto" />
+            <!-- Bottom Section -->
+        </Grid.RowDefinitions>
 
+        <!-- Top Section: Aircraft Overview -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Select Aircraft:" FontWeight="Bold" Foreground="#CCCCCC" />
+            <!-- Light Gray for readability -->
+            
+            <ComboBox x:Name="AircraftSelector" ItemsSource="{Binding TaskGroups}" DisplayMemberPath="AircraftTailNumber" SelectedItem="{Binding SelectedTaskGroup}"
+          Width="200" Background="#2C2C2C" Foreground="White" BorderBrush="#444444" />
+
+
+            
+
+
+            <!-- Dark ComboBox -->
+            <Label Content="Aircraft Info:" Margin="20,0,0,0" FontWeight="Bold" Foreground="#CCCCCC" />
+            <Label x:Name="AircraftInfo" Content="Model, Tail Number" Foreground="#CCCCCC" />
+        </StackPanel>
+
+        <!-- Middle Section: Task Group Cards -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <WrapPanel x:Name="TaskGroupCards" Margin="0,0,0,10">
+                <!-- Example Card -->
+                <Border CornerRadius="10" BorderBrush="#444444" BorderThickness="3" Background="#3C3C3C" Margin="10" Padding="10">
+                    <!-- Dark Card -->
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Task Group Name" FontWeight="Bold" FontSize="16" Foreground="#CCCCCC" />
+                        <!-- Light Gray Text -->
+                        <ProgressBar Value="75" Height="20" Margin="0,10,0,0" Foreground="#76FF03" Background="#444444" />
+                        <!-- Neon Green Progress Bar -->
+                        <TextBlock Text="75% Complete" HorizontalAlignment="Center" Foreground="#76FF03" />
+                        <!-- Neon Green for progress indicator -->
+                    </StackPanel>
+                </Border>
+                <!-- Add dynamically generated cards here -->
+            </WrapPanel>
+        </ScrollViewer>
+
+        <!-- Bottom Section: Subtask Details -->
+        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,10,0,0">
+            <Label Content="Subtasks:" FontWeight="Bold" Margin="0,0,0,5" Foreground="#CCCCCC" />
+            <ListView x:Name="SubtaskList" Height="200" Background="#3C3C3C" Foreground="#FFFFFF">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Step" DisplayMemberBinding="{Binding StepName}" Width="300" />
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="100" />
+                        <GridViewColumn Header="Actions">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Complete" Background="#76FF03" Foreground="#000000" Margin="5,0" />
+                                        <!-- Neon Green -->
+                                        <Button Content="N/A" Background="#FFD700" Foreground="#000000" Margin="5,0" />
+                                        <!-- Gold for N/A -->
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <TextBox x:Name="CommentBox" Background="#3C3C3C" Foreground="#FFFFFF" />
+        </StackPanel>
     </Grid>
 </Window>

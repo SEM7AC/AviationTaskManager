@@ -52,10 +52,8 @@
                 Background="#C0C0C0" Foreground="#2C2C2C"
                 Width="100" Height="30" HorizontalAlignment="Center" Margin="0,100,0,20" Click="LoginButton_Click" />
 
-        <!-- Error Message -->
-        <TextBlock Name="ErrorMessage"
-                   Grid.Row="6" Grid.Column="0"
-                   Foreground="Red" FontSize="12"
-                   HorizontalAlignment="Center" Visibility="Collapsed" />
+        <!-- Info Message -->
+        
+        <TextBlock x:Name="tb_info" HorizontalAlignment="Center" Margin="0,21,0,0" Grid.Row="5" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Top" Width="200" Foreground="Lime"/>
     </Grid>
 </Window>
