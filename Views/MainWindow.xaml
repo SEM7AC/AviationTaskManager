@@ -14,15 +14,29 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
             <Label Content="Select Aircraft:" FontWeight="Bold" Foreground="#CCCCCC" />
 
-            <!-- Updated ComboBox: No Binding -->
-            <ComboBox x:Name="AircraftSelector" Width="200" Background="#2C2C2C" Foreground="White" BorderBrush="#444444" SelectionChanged="AircraftSelector_SelectionChanged"/>
+            <ComboBox x:Name="AircraftSelector" Width="200" Background="#3C3C3C" Foreground="White" BorderBrush="#444444" SelectionChanged="AircraftSelector_SelectionChanged"/>
 
-            <!-- Aircraft Details -->
             <Label Content="Model:" FontWeight="Bold" Foreground="#CCCCCC" Margin="20,0,0,0"/>
             <Label x:Name="AircraftModel" Content="N/A" Foreground="#CCCCCC" />
 
             <Label Content="ACTT:" FontWeight="Bold" Foreground="#CCCCCC" Margin="20,0,0,0"/>
             <Label x:Name="AircraftACTT" Content="N/A" Foreground="#CCCCCC" />
+
+            <!-- Small Admin Action Buttons (Now Inline with ACTT) -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="100,0,0,0">
+                <Button Width="30" Height="30" IsEnabled="{Binding IsAdmin}" ToolTip="Create User" Click="Create_User_Click">
+                    <Image Source="/Assets/UserIcon.png" Width="20" Height="20"/>
+                </Button>
+                <Button Width="30" Height="30" IsEnabled="{Binding IsAdmin}" ToolTip="Create Aircraft" Margin="5,0,0,0" Click="Create_Aircraft_Click">
+                    <Image Source="/Assets/AircraftIcon.png" Width="20" Height="20"/>
+                </Button>
+                <Button Width="30" Height="30" IsEnabled="{Binding IsAdmin}" ToolTip="Create Task Group" Margin="5,0,0,0" Click="Create_TaskGroup_Click">
+                    <Image Source="/Assets/TaskGroupIcon.png" Width="20" Height="20"/>
+                </Button>
+                <Button Width="30" Height="30" IsEnabled="{Binding IsAdmin}" ToolTip="Create Subtask" Margin="5,0,0,0" Click="Create_Subtask_Click">
+                    <Image Source="/Assets/SubtaskIcon.png" Width="20" Height="20"/>
+                </Button>
+            </StackPanel>
         </StackPanel>
 
         <!-- Middle Section: Task Group Cards -->

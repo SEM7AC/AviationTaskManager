@@ -30,5 +30,29 @@ namespace AviationTaskManager
                 AircraftACTT.Content = "N/A";
                 }
             }
+
+        private void Create_User_Click(object sender, RoutedEventArgs e)
+            {
+            MessageBox.Show("Create User action triggered!");
+            // Open user creation form here
+            }
+
+        private void Create_Aircraft_Click(object sender, RoutedEventArgs e)
+            {
+            MessageBox.Show("Create Aircraft action triggered!");
+            // Open user creation form here
+            }
+
+        private void Create_TaskGroup_Click(object sender, RoutedEventArgs e)
+            {
+            MessageBox.Show("Create TaskGroup action triggered!");
+            // Open user creation form here
+            }
+
+        private void Create_Subtask_Click(object sender, RoutedEventArgs e)
+            {
+            MessageBox.Show("Create Subtask action triggered!");
+            // Open user creation form here
+            }
         }
 }

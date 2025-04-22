@@ -1,4 +1,5 @@
 ﻿using AviationTaskManager.Models;
+using AviationTaskManager.ViewModels;
 using Microsoft.Data.Sqlite;
 using System.Data.SqlClient;
 using System.Windows;
@@ -21,18 +22,27 @@ namespace AviationTaskManager.Views
             {
             // Retrieve input from the UI
             string username = UsernameInput.Text.Trim();
-            string password = PasswordInput.Password; // Use PasswordBox for secure input
+            string password = PasswordInput.Password; // Secure input
             string role;
 
-            // Call the AuthenticateUser method from DatabaseManager
+            // Call AuthenticateUser to get the role
             if (DatabaseManager.AuthenticateUser(username, password, out role))
                 {
                 tb_info.Foreground = Brushes.Green;
                 tb_info.Text = "Successful login.";
 
-                // Navigate to the main window
-                GotoMainWindow();
-                
+                // Set the role in ViewModel
+                MainWindowViewModel viewModel = new MainWindowViewModel();
+                viewModel.CurrentUserRole = role; // Assign fetched role
+
+                // Pass ViewModel to MainWindow
+                MainWindow mainWindow = new MainWindow
+                    {
+                    DataContext = viewModel // Ensuring DataContext contains updated role
+                    };
+
+                mainWindow.Show();
+                this.Close(); // Close login window
                 }
             else
                 {
