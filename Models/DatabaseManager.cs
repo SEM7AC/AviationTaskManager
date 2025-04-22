@@ -47,7 +47,7 @@ namespace AviationTaskManager.Models
             CREATE TABLE IF NOT EXISTS SubTasks (
             SubtaskId INTEGER PRIMARY KEY AUTOINCREMENT,
             TaskGroupId INTEGER NOT NULL,
-            StepName TEXT NOT NULL,
+            TaskName TEXT NOT NULL,
             Status TEXT DEFAULT 'Incomplete',
             Comment TEXT,
             FOREIGN KEY (TaskGroupId) REFERENCES TaskGroups (TaskGroupId) ON DELETE CASCADE
@@ -62,8 +62,8 @@ namespace AviationTaskManager.Models
             string sql = @"
             CREATE TABLE IF NOT EXISTS TaskGroups (
             TaskGroupId INTEGER PRIMARY KEY, 
-            AircraftTailNumber TEXT NOT NULL, 
-            GroupName TEXT NOT NULL);";
+            GroupName TEXT NOT NULL
+            );";
             ExecuteNonQuery(sql);
             Debug.WriteLine("TaskGroups table created successfully.");
             }
@@ -81,6 +81,34 @@ namespace AviationTaskManager.Models
             UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP);";
             ExecuteNonQuery(sql);
             Debug.WriteLine("Users table created successfully.");
+            }
+
+        // Create Aircraft Table
+        public static void CreateAircraftTable()
+            {
+            string sql = @"
+            CREATE TABLE IF NOT EXISTS Aircraft (
+            AircraftId INTEGER PRIMARY KEY,
+            TailNumber TEXT UNIQUE,
+            Model TEXT,
+            TotalTime REAL
+            );";
+            ExecuteNonQuery(sql);
+            Debug.WriteLine("Aircraft table created successfully.");
+            }
+
+        public static void CreateTaskGroupAssignment()
+            {
+            string sql = @"
+            CREATE TABLE IF NOT EXISTS TaskGroupAssignment (
+            AssignmentId INTEGER PRIMARY KEY,
+            AircraftId INTEGER NOT NULL,
+            TaskGroupId INTEGER NOT NULL,
+            FOREIGN KEY (AircraftId) REFERENCES Aircraft(AircraftId),
+            FOREIGN KEY (TaskGroupId) REFERENCES TaskGroups(TaskGroupId)
+            );";  
+            ExecuteNonQuery(sql);
+            Debug.WriteLine("TaskGroupAssignment table created successfully. ");
             }
 
         // Create Update trigger
@@ -208,7 +236,7 @@ namespace AviationTaskManager.Models
             using (var connection = new SQLiteConnection(ConnectionString))
                 {
                 connection.Open();
-                string query = "SELECT TaskGroupId, AircraftTailNumber, GroupName FROM TaskGroups";
+                string query = "SELECT TaskGroupId, GroupName FROM TaskGroups";
 
                 using (var command = new SQLiteCommand(query, connection))
                 using (var reader = command.ExecuteReader())
@@ -218,8 +246,7 @@ namespace AviationTaskManager.Models
                         taskGroups.Add(new TaskGroup
                             {
                             TaskGroupId = reader.GetInt32(0),
-                            AircraftTailNumber = reader.GetString(1),
-                            GroupName = reader.GetString(2)
+                            GroupName = reader.GetString(1)
                             });
                         }
                     }

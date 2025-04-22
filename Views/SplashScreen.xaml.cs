@@ -48,13 +48,17 @@ namespace AviationTaskManager.Views
                     string sql0 = @"SELECT name FROM sqlite_master WHERE type='table' AND name='Users';";
                     string sql1 = @"SELECT name FROM sqlite_master WHERE type='table' AND name='TaskGroups';";
                     string sql2 = @"SELECT name FROM sqlite_master WHERE type='table' AND name='SubTasks';";
-                    string sql3 = @"SELECT name FROM sqlite_master WHERE type='trigger' AND name='UpdateUsersTimestamp';";
+                    string sql3 = @"SELECT name FROM sqlite_master WHERE type='table' AND name='Aircraft';";
+                    string sql4 = @"SELECT name FROM sqlite_master WHERE type='table' AND name='TaskGroupAssignment';";
+                    string sql5 = @"SELECT name FROM sqlite_master WHERE type='trigger' AND name='UpdateUsersTimestamp';";
 
                     // Check existence of each
+                    bool aircraftExist = false;
                     bool usersExist = false;
                     bool taskGroupsExist = false;
                     bool subTasksExist = false;
                     bool updateTriggerExist = false;
+                    bool taskgroupAssignmentExist = false;
 
                     using (var cmd = new SQLiteCommand(sql0, connection))
                         {
@@ -71,11 +75,19 @@ namespace AviationTaskManager.Views
                         subTasksExist = cmd.ExecuteScalar() != null;
                         }
                     using (var cmd = new SQLiteCommand(sql3, connection))
+                        {
+                        aircraftExist = cmd.ExecuteScalar() != null;
+                        }
+                    using (var cmd = new SQLiteCommand(sql4, connection))
                         { 
+                        taskgroupAssignmentExist = cmd.ExecuteScalar() != null;
+                        }
+                    using (var cmd = new SQLiteCommand(sql5, connection))
+                        {
                         updateTriggerExist = cmd.ExecuteScalar() != null;
                         }
 
-                    if (!usersExist || !taskGroupsExist || !subTasksExist ||!updateTriggerExist)
+                    if (!usersExist || !taskGroupsExist || !aircraftExist ||!subTasksExist ||!updateTriggerExist || !taskgroupAssignmentExist)
                         {
                         // Create tables and triggers
                         status_txt.Content = "Creating tables and triggers...";
@@ -100,6 +112,16 @@ namespace AviationTaskManager.Views
                             {
                             DatabaseManager.CreateUpdateTrigger();
                             Debug.WriteLine("CreateUpdateTrigger called");
+                            }
+                        if (!aircraftExist)
+                            {
+                            DatabaseManager.CreateAircraftTable();
+                            Debug.WriteLine("CreateAircraftTable called");
+                            }
+                        if (!taskgroupAssignmentExist)
+                            {
+                            DatabaseManager.CreateTaskGroupAssignment();
+                            Debug.WriteLine("CreateTaskGroupsAssignment called");
                             }
                         }
                     else
