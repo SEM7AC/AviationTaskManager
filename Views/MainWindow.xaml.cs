@@ -1,5 +1,7 @@
 ﻿using AviationTaskManager.Models;
 using AviationTaskManager.ViewModels;
+using AviationTaskManager.Views;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -33,25 +35,26 @@ namespace AviationTaskManager
 
         private void Create_User_Click(object sender, RoutedEventArgs e)
             {
-            MessageBox.Show("Create User action triggered!");
-            // Open user creation form here
+            Debug.WriteLine("Create User action triggered!");
+            CreateUser createUser = new CreateUser();
+            createUser.ShowDialog();
             }
 
         private void Create_Aircraft_Click(object sender, RoutedEventArgs e)
             {
-            MessageBox.Show("Create Aircraft action triggered!");
+            Debug.WriteLine("Create Aircraft action triggered!");
             // Open user creation form here
             }
 
         private void Create_TaskGroup_Click(object sender, RoutedEventArgs e)
             {
-            MessageBox.Show("Create TaskGroup action triggered!");
+            Debug.WriteLine("Create TaskGroup action triggered!");
             // Open user creation form here
             }
 
         private void Create_Subtask_Click(object sender, RoutedEventArgs e)
             {
-            MessageBox.Show("Create Subtask action triggered!");
+            Debug.WriteLine("Create Subtask action triggered!");
             // Open user creation form here
             }
         }
