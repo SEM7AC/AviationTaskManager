@@ -1,7 +1,13 @@
 ﻿<Window x:Class="AviationTaskManager.Views.Login"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:local="clr-namespace:AviationTaskManager.ViewModels"
         Title="Login" Height="400" Width="350" Background="#2C2C2C" WindowStartupLocation="CenterScreen">
+    
+    <Window.DataContext>
+        <local:LoginViewModel />
+    </Window.DataContext>
+
     <Grid Margin="20">
         <!-- Define rows and columns -->
         <Grid.RowDefinitions>
@@ -53,7 +59,7 @@
                 Width="100" Height="30" HorizontalAlignment="Center" Margin="0,100,0,20" Click="LoginButton_Click" />
 
         <!-- Info Message -->
-        
-        <TextBlock x:Name="tb_info" HorizontalAlignment="Center" Margin="0,21,0,0" Grid.Row="5" TextWrapping="Wrap" Text="Status: Fix this Soon cuz you suck!" VerticalAlignment="Top" Width="200" Foreground="Lime"/>
+
+        <TextBlock x:Name="tb_info" HorizontalAlignment="Center" Margin="0,21,0,0" Grid.Row="5" TextWrapping="Wrap" Text="{Binding StatusMessage}" VerticalAlignment="Top" Width="200" Foreground="Lime"/>
     </Grid>
 </Window>

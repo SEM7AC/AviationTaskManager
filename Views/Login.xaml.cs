@@ -1,9 +1,6 @@
 ﻿using AviationTaskManager.Models;
 using AviationTaskManager.ViewModels;
-using Microsoft.Data.Sqlite;
-using System.Data.SqlClient;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace AviationTaskManager.Views
@@ -20,6 +17,9 @@ namespace AviationTaskManager.Views
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
             {
+
+            var loginVM = DataContext as LoginViewModel; // Reference ViewModel
+            if (loginVM == null) return; // Ensure ViewModel exists
             // Retrieve input from the UI
             string username = UsernameInput.Text.Trim();
             string password = PasswordInput.Password; // Secure input
@@ -29,7 +29,8 @@ namespace AviationTaskManager.Views
             if (DatabaseManager.AuthenticateUser(username, password, out role))
                 {
                 tb_info.Foreground = Brushes.Green;
-                tb_info.Text = "Successful login.";
+                loginVM.StatusMessage = "Successful login.";  // ✅ UI updates via binding
+                await Task.Delay(1000);
 
                 // Set the role in ViewModel
                 MainWindowViewModel viewModel = new MainWindowViewModel();
@@ -41,15 +42,16 @@ namespace AviationTaskManager.Views
                     DataContext = viewModel // Ensuring DataContext contains updated role
                     };
 
-                Task.Delay(1000);
+                await Task.Delay(1000);
                 mainWindow.Show();
                 this.Close(); // Close login window
                 }
             else
                 {
                 tb_info.Foreground = Brushes.Red;
-                tb_info.Text = "Invalid username or password.";
-                 await ResetStatusText();
+                loginVM.StatusMessage = "Invalid username or password.";  // ✅ UI updates via binding
+                await ResetStatusText(); // Reset message
+                
                 }
             }
 
