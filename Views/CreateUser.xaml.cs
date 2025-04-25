@@ -13,7 +13,7 @@ namespace AviationTaskManager.Views
             InitializeComponent();
             }
 
-        private void CreateUserButton_Click(object sender, RoutedEventArgs e)
+        private async void CreateUserButton_Click(object sender, RoutedEventArgs e)
             {
             string username = UsernameInput.Text.Trim();
             string password = PasswordInput.Password.Trim();
@@ -38,6 +38,8 @@ namespace AviationTaskManager.Views
             
             // Call DB Manager methods to handle creation or password update
             tb_info.Text = DatabaseManager.CreateUser(username, password, role);
+            await Task.Delay(2000);
+            this.Close();
 
 
             }

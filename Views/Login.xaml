@@ -54,6 +54,6 @@
 
         <!-- Info Message -->
         
-        <TextBlock x:Name="tb_info" HorizontalAlignment="Center" Margin="0,21,0,0" Grid.Row="5" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Top" Width="200" Foreground="Lime"/>
+        <TextBlock x:Name="tb_info" HorizontalAlignment="Center" Margin="0,21,0,0" Grid.Row="5" TextWrapping="Wrap" Text="Status: Fix this Soon cuz you suck!" VerticalAlignment="Top" Width="200" Foreground="Lime"/>
     </Grid>
 </Window>

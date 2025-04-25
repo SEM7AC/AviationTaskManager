@@ -18,7 +18,7 @@ namespace AviationTaskManager.Views
             InitializeComponent();
             }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
             {
             // Retrieve input from the UI
             string username = UsernameInput.Text.Trim();
@@ -41,6 +41,7 @@ namespace AviationTaskManager.Views
                     DataContext = viewModel // Ensuring DataContext contains updated role
                     };
 
+                Task.Delay(1000);
                 mainWindow.Show();
                 this.Close(); // Close login window
                 }
@@ -48,7 +49,7 @@ namespace AviationTaskManager.Views
                 {
                 tb_info.Foreground = Brushes.Red;
                 tb_info.Text = "Invalid username or password.";
-                ResetStatusText();
+                 await ResetStatusText();
                 }
             }
 
