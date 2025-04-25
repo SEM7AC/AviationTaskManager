@@ -43,6 +43,8 @@ namespace AviationTaskManager
         private void Create_Aircraft_Click(object sender, RoutedEventArgs e)
             {
             Debug.WriteLine("Create Aircraft action triggered!");
+            CreateAircraft createAircraft = new CreateAircraft();
+            createAircraft.ShowDialog();
             // Open user creation form here
             }
 

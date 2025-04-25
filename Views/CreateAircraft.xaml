@@ -1,0 +1,71 @@
+﻿<Window x:Class="AviationTaskManager.Views.CreateAircraft"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Create Aircraft" Height="400" Width="350" Background="#2C2C2C" WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Title -->
+            <RowDefinition Height="Auto"/>
+            <!-- Tail Number -->
+            <RowDefinition Height="Auto"/>
+            <!-- Tail Number Input -->
+            <RowDefinition Height="Auto"/>
+            <!-- Model -->
+            <RowDefinition Height="Auto"/>
+            <!-- Model Dropdown -->
+            <RowDefinition Height="Auto"/>
+            <!-- ACTT -->
+            <RowDefinition Height="Auto"/>
+            <!-- ACTT Input -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Text="Create Aircraft"
+                   Grid.Row="0" Foreground="#FFFFFF"
+                   FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <!-- Tail Number -->
+        <TextBlock Text="Tail Number:" Grid.Row="1" Foreground="#FFFFFF" Margin="55,0,0,5"/>
+        <TextBox Name="TailNumberBox" Grid.Row="2"
+                 Height="30" Width="200" HorizontalAlignment="Center" FontSize="16"/>
+
+        <!-- Model -->
+        <TextBlock Text="Model:" Grid.Row="3" Foreground="#FFFFFF" Margin="55,10,0,5"/>
+        <ComboBox Name="ModelDropdown" Grid.Row="4"
+                  Width="200" HorizontalAlignment="Center">
+            <ComboBoxItem Content="H125"/>
+            <ComboBoxItem Content="H130"/>
+            <ComboBoxItem Content="H135"/>
+            <ComboBoxItem Content="H145"/>
+            <ComboBoxItem Content="H160"/>
+            <ComboBoxItem Content="H175"/>
+            <ComboBoxItem Content="H225"/>
+            <ComboBoxItem Content="MD 500E"/>
+            <ComboBoxItem Content="MD 520N"/>
+            <ComboBoxItem Content="MD 530F"/>
+            <ComboBoxItem Content="MD 600N"/>
+            <ComboBoxItem Content="MD 902 Explorer"/>
+            <ComboBoxItem Content="Bell 206B JetRanger"/>
+            <ComboBoxItem Content="Bell 407"/>
+            <ComboBoxItem Content="Bell 412EP"/>
+            <ComboBoxItem Content="Bell 429"/>
+            <ComboBoxItem Content="Bell 505 Jet Ranger X"/>
+            <ComboBoxItem Content="Bell 525 Relentless"/>
+        </ComboBox>
+
+        <!-- ACTT -->
+        <TextBlock Text="ACTT (Total Time):" Grid.Row="5" Foreground="#FFFFFF" Margin="55,10,0,5"/>
+        <TextBox Name="ActtBox" Grid.Row="6"
+                 Height="30" Width="200" HorizontalAlignment="Center"/>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="7" Orientation="Horizontal"
+                    HorizontalAlignment="Center" Margin="0,50,0,0">
+            <Button Content="Save" Width="80"/>
+            <Button Content="Cancel" Width="80" Margin="10,0,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

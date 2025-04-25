@@ -217,6 +217,50 @@ namespace AviationTaskManager.Models
             return resultMessage;
             }
 
+        // Create a new Aircraft
+
+        public static string CreateAircraft(Aircraft aircraft)
+            {
+            using (var connection = new SQLiteConnection("Data Source=your_database.db;Version=3;"))
+                {
+                connection.Open();
+
+                // Check if the aircraft already exists by TailNumber
+                string checkQuery = "SELECT COUNT(*) FROM Aircraft WHERE TailNumber = @TailNumber";
+                using (var checkCommand = new SQLiteCommand(checkQuery, connection))
+                    {
+                    checkCommand.Parameters.AddWithValue("@TailNumber", aircraft.TailNumber);
+                    int count = Convert.ToInt32(checkCommand.ExecuteScalar());
+
+                    if (count > 0) // Aircraft exists, update ACTT
+                        {
+                        string updateQuery = "UPDATE Aircraft SET TotalTime = @TotalTime WHERE TailNumber = @TailNumber";
+                        using (var updateCommand = new SQLiteCommand(updateQuery, connection))
+                            {
+                            updateCommand.Parameters.AddWithValue("@TailNumber", aircraft.TailNumber);
+                            updateCommand.Parameters.AddWithValue("@TotalTime", aircraft.TotalTime);
+                            updateCommand.ExecuteNonQuery();
+                            string result = "Updated aircraft successfully.";
+                            return result;
+                            }
+                        }
+                    else // New aircraft, insert it
+                        {
+                        string insertQuery = "INSERT INTO Aircraft (TailNumber, Model, TotalTime) VALUES (@TailNumber, @Model, @TotalTime)";
+                        using (var insertCommand = new SQLiteCommand(insertQuery, connection))
+                            {
+                            insertCommand.Parameters.AddWithValue("@TailNumber", aircraft.TailNumber);
+                            insertCommand.Parameters.AddWithValue("@Model", aircraft.Model);
+                            insertCommand.Parameters.AddWithValue("@TotalTime", aircraft.TotalTime);
+                            insertCommand.ExecuteNonQuery();
+                            string result = "Created aircraft successfully.";
+                            return result;
+                            }
+                        }
+                    }
+                }
+            }
+
         // Authenticate Users
         public static bool AuthenticateUser(string username, string password, out string role)
             {
