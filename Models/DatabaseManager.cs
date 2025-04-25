@@ -175,25 +175,46 @@ namespace AviationTaskManager.Models
             }
 
         // Create a new user
-        public static void CreateUser(string username, string plainPassword, string role)
+        public static string CreateUser(string username, string plainPassword, string role)
             {
             string hashedPassword = HashPassword(plainPassword);
+            string query;
+            string resultMessage;
 
-            string query = "INSERT INTO Users (UserName, PasswordHash, Role) VALUES (@UserName, @PasswordHash, @Role)";
             using (var connection = new SqliteConnection(ConnectionString))
                 {
                 connection.Open();
+
+                using (var checkCmd = new SqliteCommand("SELECT COUNT(*) FROM Users WHERE UserName = @UserName", connection))
+                    {
+                    checkCmd.Parameters.AddWithValue("@UserName", username);
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (count > 0)
+                        {
+                        query = "UPDATE Users SET PasswordHash = @PasswordHash WHERE UserName = @UserName";
+                        resultMessage = "Password updated successfully!";
+                        }
+                    else
+                        {
+                        query = "INSERT INTO Users (UserName, PasswordHash, Role) VALUES (@UserName, @PasswordHash, @Role)";
+                        resultMessage = "User created successfully!";
+                        }
+                    }
+
                 using (var command = new SqliteCommand(query, connection))
                     {
                     command.Parameters.AddWithValue("@UserName", username);
                     command.Parameters.AddWithValue("@PasswordHash", hashedPassword);
-                    command.Parameters.AddWithValue("@Role", role);
+
+                    if (query.Contains("INSERT"))
+                        command.Parameters.AddWithValue("@Role", role);
 
                     command.ExecuteNonQuery();
                     }
                 }
 
-            System.Diagnostics.Debug.WriteLine($"User {username} created successfully.");
+            return resultMessage;
             }
 
         // Authenticate Users

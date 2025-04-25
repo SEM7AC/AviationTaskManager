@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using AviationTaskManager.Models;
+using System.Windows;
 
 namespace AviationTaskManager.Views
     {
@@ -34,11 +35,22 @@ namespace AviationTaskManager.Views
 
             // If validation passes, move forward
             tb_info.Text = "Validation successful! Ready for database insertion.";
+            
+            // Call DB Manager methods to handle creation or password update
+            tb_info.Text = DatabaseManager.CreateUser(username, password, role);
+
+
             }
+
+
+
 
         private void CancelUserCreation(object sender, RoutedEventArgs e)
             {
             this.Close();
             }
-        }
-    }
+        
+        
+        } // END OF CLASS
+    
+    } // END OF FILE
