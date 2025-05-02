@@ -59,5 +59,15 @@ namespace AviationTaskManager
             Debug.WriteLine("Create Subtask action triggered!");
             // Open user creation form here
             }
+
+       
+        private void Logout_Click(object sender, RoutedEventArgs e)
+            {
+            Debug.WriteLine("Logout action triggered!");
+            this.Hide();
+            Login login = new Login();
+            login.ShowDialog();
+            this.Close();
+            }
         }
 }

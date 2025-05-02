@@ -36,6 +36,9 @@
                 <Button FontFamily="Segoe Fluent Icons" Content="&#xE7C3;" Background="#3C3C3C" Foreground="#CCCCCC" Width="30" Height="30" IsEnabled="{Binding IsAdmin}" ToolTip="Create Subtask" Margin="5,0,0,0" Click="Create_Subtask_Click">
                     
                 </Button>
+                <Button FontFamily="Segoe Fluent Icons" Content="&#xF3B1;" Background="#3C3C3C" Foreground="#CCCCCC" Width="30" Height="30" IsEnabled="True" ToolTip="Log Out" Margin="5,0,0,0" Click="Logout_Click">
+
+                </Button>
             </StackPanel>
         </StackPanel>
 
