@@ -64,8 +64,8 @@
         <!-- Buttons -->
         <StackPanel Grid.Row="7" Orientation="Horizontal"
                     HorizontalAlignment="Center" Margin="0,50,0,0">
-            <Button Content="Save" Width="80"/>
-            <Button Content="Cancel" Width="80" Margin="10,0,0,0"/>
+            <Button Content="Save" Width="80" Click="Save_Aircraft_Click"/>
+            <Button Content="Cancel" Width="80" Margin="10,0,0,0" Click="Cancel_Click"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -42,6 +42,7 @@ namespace AviationTaskManager.ViewModels
             {
             // Initialize data (fetch from the database)
             TaskGroups = new ObservableCollection<TaskGroup>(DatabaseManager.GetAllTaskGroups());
+            
             }
         }
     } /// END OF FILE

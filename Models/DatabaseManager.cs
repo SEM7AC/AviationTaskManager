@@ -221,7 +221,7 @@ namespace AviationTaskManager.Models
 
         public static string CreateAircraft(Aircraft aircraft)
             {
-            using (var connection = new SQLiteConnection("Data Source=your_database.db;Version=3;"))
+            using (var connection = new SQLiteConnection(ConnectionString))
                 {
                 connection.Open();
 
